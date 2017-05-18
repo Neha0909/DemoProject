@@ -10,12 +10,12 @@ import PropertyFileReader.PropertyReader;
 public class DriverClass {
 
 	public static WebDriver driver;
-	PropertyReader prop = new PropertyReader();
-	public static String URL="";
-//	public DriverClass(){
-/*
-	String BrowserToSelect	= prop.PropertyReader("Browser");
-	System.out.println(BrowserToSelect);
+	public PropertyReader p = new PropertyReader();
+	public DriverClass(){
+	String URL = "https://mywipro.wipro.com";
+		try{
+	   String BrowserToSelect = p.PropReader("Browser");
+	   System.out.println(BrowserToSelect);
 		if(BrowserToSelect.equalsIgnoreCase("Firefox")){
 		driver = new FirefoxDriver();
 		} else if(BrowserToSelect.equalsIgnoreCase("Chrome")){
@@ -25,12 +25,19 @@ public class DriverClass {
 		System.setProperty("webdriver.ie.driver","C:\\Users\\ne321427\\Downloads\\Selenium files\\Selenium files\\BrowserDrivers\\IEDriverServer.exe");
 		driver = new InternetExplorerDriver();
 		}
-		URL = prop.PropertyReader("Url");
+	//	URL = prop.PropertyReader("Url");
 		
 		driver.navigate().to(URL);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			driver.close();
+			driver.quit();
+		}
 	}
 	
-	*/
+	
 	public static void main(String[] args) {
 		
 		DriverClass d = new DriverClass();
