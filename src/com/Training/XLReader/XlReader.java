@@ -21,19 +21,56 @@ public class XlReader {
 	private String excelFilePath = "C:\\Users\\ne321427\\workspace\\Project1\\TestCases\\TestCases.xlsx";
 	private FileInputStream inputStream ;
 	private Workbook workbook;
-	private Sheet firstSheet;
+	private static Sheet firstSheet;
+	private static String BrowserToSelect = "";
+	private static String TestCaseName = "";
 	private static int rowcount=0;
 	private static int colCount=0;
 	private ArrayList<String> arr1=new ArrayList<String>();
 	
-	public XlReader() throws Exception{
+	public XlReader() {
+		try{
 		inputStream = new FileInputStream(new File(excelFilePath));
 		workbook = new XSSFWorkbook(inputStream);
-		firstSheet = workbook.getSheet("RunManager");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void switchXlWorkBook(String Sheetname)throws Exception{
+		
+		try{
+			firstSheet = workbook.getSheet(Sheetname);
+			
+			if(firstSheet.equals("Runmanager")){
+				System.out.println("--Inside Xl reader method --");
+				
+				
+				List<String> ArrayList=new ArrayList<String>();
+				ArrayList.addAll(getRowsData());
+			    Iterator<String> iterator = ArrayList.iterator();
+			     
+			     while (iterator.hasNext()) {
+			         String ArrayIndex = iterator.next();
+			         if(ArrayIndex.equals("Y")){
+			        	
+			        	 TestCaseName = iterator.next();
+			        	 
+			        	 BrowserToSelect = iterator.next();
+			        	
+			         }
+			     }
+			}else{
+			getRowsData();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
-	public List<String> getRows() throws Exception{
-	//	List<String> cellContents = new ArrayList<String>();
+	public List<String> getRowsData() throws Exception{
+
 		int Counter  = 0;
 		rowcount = firstSheet.getLastRowNum(); // index frm 0
 		rowcount++;
@@ -45,8 +82,6 @@ public class XlReader {
 		 			for(int j=0;j<colCount;j++){
 		 			String cell = row.getCell(j).toString().trim();
 		 			arr1.add(cell);
-		 //			String print= cellContents.get(i);
-		 //			System.out.println("Arraylist"+print);
 		 			System.out.println(arr1.get(Counter));
 		 			Counter++;
 	

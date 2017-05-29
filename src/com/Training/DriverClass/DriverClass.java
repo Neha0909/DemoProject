@@ -18,7 +18,8 @@ import PropertyFileReader.PropertyReader;
 public class DriverClass {
 
 	private static WebDriver driver;
-	private static String BrowserToSelect = "";
+	
+	 static XlReader reader = null;
 	
 	public static void LaunchDriver (String BrowserToSelect){
 	String URL = "https://mywipro.wipro.com";
@@ -47,21 +48,10 @@ public class DriverClass {
 	
 	public static void main(String[] args) throws Exception {
 		
-		XlReader readXl=new XlReader();
 		
-		System.out.println("--Inside Xl reader method --");
-		
-		List<String> ArrayList=new ArrayList<String>();
-		ArrayList.addAll(readXl.getRows());
-	    Iterator<String> iterator = ArrayList.iterator();
-	     
-	     while (iterator.hasNext()) {
-	         String ArrayIndex = iterator.next();
-	         if(ArrayIndex.equals("Y")){
-	        	 
-	        	 BrowserToSelect = iterator.next();
-	        	LaunchDriver(BrowserToSelect);
-	         }		
-	}
-	}
+	       reader = new XlReader();
+	       reader.switchXlWorkBook("Runmanager");
+	       
+}
+	
 }
