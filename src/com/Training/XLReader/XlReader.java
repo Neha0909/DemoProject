@@ -3,9 +3,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Header;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -15,19 +18,35 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class XlReader {
 	
 	
-final public String excelFilePath = "C:\\Users\\ne321427\\workspace\\Project1\\TestCases";
-	 
-	 
-	 
-	 
+	public String excelFilePath = "C:\\Users\\ne321427\\workspace\\Project1\\TestCases\\TestCases.xlsx";
+	public FileInputStream inputStream ;
+	public Workbook workbook;
+	public Sheet firstSheet;
+	public static int rowcount=0;
+	public static int colCount=0;
+	public ArrayList<String> arr1=new ArrayList<String>();
+	
+	public XlReader() throws Exception{
+		inputStream = new FileInputStream(new File(excelFilePath));
+		workbook = new XSSFWorkbook(inputStream);
+		firstSheet = workbook.getSheet("RunManager");
+	}
+
+
 	public void XLReader() throws FileNotFoundException{
-		try{ 
-     FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
-     Workbook workbook = new XSSFWorkbook(inputStream);
-     Sheet firstSheet = workbook.getSheetAt(0);
-     Header header = firstSheet.getHeader();
+		try{
+			
+      inputStream = new FileInputStream(new File(excelFilePath));
+      workbook = new XSSFWorkbook(inputStream);
+      firstSheet = workbook.getSheet("RunManager");
+//    Header header=firstSheet.getHeader();
+     int rowcount = firstSheet.getPhysicalNumberOfRows();
+     System.out.println("total num of rows are"+rowcount);
+     
      
      Iterator<Row> iterator = firstSheet.iterator();
+     ArrayList<String> columndata = null;
+     columndata=new ArrayList<>();
       
      while (iterator.hasNext()) {
          Row nextRow = iterator.next();
@@ -35,21 +54,23 @@ final public String excelFilePath = "C:\\Users\\ne321427\\workspace\\Project1\\T
           
          while (cellIterator.hasNext()) {
              Cell cell = cellIterator.next();
-              
-             switch (cell.getCellType()) {
-                 case Cell.CELL_TYPE_STRING:
-                     System.out.print(cell.getStringCellValue());
-                     break;
-                 case Cell.CELL_TYPE_BOOLEAN:
-                     System.out.print(cell.getBooleanCellValue());
-                     break;
-                 case Cell.CELL_TYPE_NUMERIC:
-                     System.out.print(cell.getNumericCellValue());
-                     break;
+           if(nextRow.getRowNum()>0){//to filter column headings
+  
+        	   if(cell.getCellTypeEnum()==CellType.STRING){
+            	 System.out.println("Cell is having String Value"+cell);
+            	 
+            }
+             else if(cell.getCellTypeEnum()== CellType.NUMERIC){
+            	 System.out.println("Cell is having numeric value");
+             }
+             else if(cell.getCellTypeEnum()==CellType.BLANK){
+            	 System.out.println("Cell is Empty");
              }
              System.out.print(" - ");
+        
+        
          }
-         System.out.println();
+         } 	
      }
       
      workbook.close();
@@ -60,4 +81,28 @@ final public String excelFilePath = "C:\\Users\\ne321427\\workspace\\Project1\\T
      }
 	 
 	 }
-}
+	
+	
+	public List<String> getRows() throws Exception{
+		List<String> cellContents = new ArrayList<String>();
+		
+		rowcount = firstSheet.getLastRowNum(); // index frm 0
+		rowcount++;
+ 		System.out.println("Rows are"+rowcount);
+		 for(int i=0;i<rowcount;i++){  // num of rows needed		
+		 			colCount = firstSheet.getRow(i).getLastCellNum();
+		 			System.out.println("Cols are"+colCount);
+		 			Row row = firstSheet.getRow(i);
+		 			for(int j=0;j<colCount;j++){
+		 			String cell = row.getCell(j).toString().trim();
+		 			arr1.add(cell);
+		 //			String print= cellContents.get(i);
+		 //			System.out.println("Arraylist"+print);
+		 			System.out.println(arr1.get(j));
+		 			}	 			
+		 			}
+		 	return 	cellContents;
+	}
+	
+	}
+

@@ -1,9 +1,13 @@
 package com.Training.DriverClass;
 
+import java.io.FileNotFoundException;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+
+import com.Training.XLReader.XlReader;
 
 import PropertyFileReader.PropertyReader;
 
@@ -38,9 +42,16 @@ public class DriverClass {
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
-		DriverClass d = new DriverClass();
+	//	DriverClass d = new DriverClass();
+		XlReader readXl=new XlReader();
+		
+		System.out.println("--Inside Xl reader method --");
+		readXl.getRows();
+		
+		
+		
 	}
 
 }
