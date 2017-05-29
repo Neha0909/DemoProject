@@ -1,7 +1,11 @@
 package com.Training.DriverClass;
 
 import java.io.FileNotFoundException;
-
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -13,12 +17,13 @@ import PropertyFileReader.PropertyReader;
 
 public class DriverClass {
 
-	public static WebDriver driver;
-	public PropertyReader p = new PropertyReader();
-	public DriverClass(){
+	private static WebDriver driver;
+	private static String BrowserToSelect = "";
+	
+	public static void LaunchDriver (String BrowserToSelect){
 	String URL = "https://mywipro.wipro.com";
-		try{
-	   String BrowserToSelect = p.PropReader("Browser");
+	
+		try{	   
 	   System.out.println(BrowserToSelect);
 		if(BrowserToSelect.equalsIgnoreCase("Firefox")){
 		driver = new FirefoxDriver();
@@ -28,9 +33,7 @@ public class DriverClass {
 		} else if(BrowserToSelect.equalsIgnoreCase("IE")){
 		System.setProperty("webdriver.ie.driver","C:\\Users\\ne321427\\Downloads\\Selenium files\\Selenium files\\BrowserDrivers\\IEDriverServer.exe");
 		driver = new InternetExplorerDriver();
-		}
-	//	URL = prop.PropertyReader("Url");
-		
+		}		
 		driver.navigate().to(URL);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -44,14 +47,21 @@ public class DriverClass {
 	
 	public static void main(String[] args) throws Exception {
 		
-	//	DriverClass d = new DriverClass();
 		XlReader readXl=new XlReader();
 		
 		System.out.println("--Inside Xl reader method --");
-		readXl.getRows();
 		
-		
-		
+		List<String> ArrayList=new ArrayList<String>();
+		ArrayList.addAll(readXl.getRows());
+	    Iterator<String> iterator = ArrayList.iterator();
+	     
+	     while (iterator.hasNext()) {
+	         String ArrayIndex = iterator.next();
+	         if(ArrayIndex.equals("Y")){
+	        	 
+	        	 BrowserToSelect = iterator.next();
+	        	LaunchDriver(BrowserToSelect);
+	         }		
 	}
-
+	}
 }
