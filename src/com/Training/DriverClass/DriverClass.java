@@ -17,11 +17,19 @@ import PropertyFileReader.PropertyReader;
 
 public class DriverClass {
 
-	private static WebDriver driver;
+	private  static WebDriver driver;
+	private  static DriverClass driverobject=null;
+	private  static XlReader reader = null;
 	
-	 static XlReader reader = null;
-	
-	public static void LaunchDriver (String BrowserToSelect){
+	 public static synchronized DriverClass get(){
+		 if(driverobject==null){
+			 driverobject = new DriverClass();
+		 }
+		 
+		 return driverobject;
+	 }
+	 
+	public  void LaunchDriver (String BrowserToSelect){
 	String URL = "https://mywipro.wipro.com";
 	
 		try{	   
@@ -50,8 +58,8 @@ public class DriverClass {
 		
 		
 	       reader = new XlReader();
-	       reader.switchXlWorkBook("Runmanager");
-	       
+	       reader.switchXlWorkBook("RunManager");
+	       reader.runTC();
 }
 	
 }

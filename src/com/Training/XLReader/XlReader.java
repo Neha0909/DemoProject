@@ -15,18 +15,21 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.Training.DriverClass.DriverClass;
+
 public class XlReader {
 	
 	
 	private String excelFilePath = "C:\\Users\\ne321427\\workspace\\Project1\\TestCases\\TestCases.xlsx";
 	private FileInputStream inputStream ;
-	private Workbook workbook;
+	private static Workbook workbook;
 	private static Sheet firstSheet;
 	private static String BrowserToSelect = "";
 	private static String TestCaseName = "";
 	private static int rowcount=0;
 	private static int colCount=0;
-	private ArrayList<String> arr1=new ArrayList<String>();
+	private static String SheetName = "";
+	private static ArrayList<String> arr1=new ArrayList<String>();
 	
 	public XlReader() {
 		try{
@@ -38,12 +41,12 @@ public class XlReader {
 		
 	}
 	
-	public void switchXlWorkBook(String Sheetname)throws Exception{
+	public static void switchXlWorkBook(String Sheetname)throws Exception{
 		
 		try{
 			firstSheet = workbook.getSheet(Sheetname);
-			
-			if(firstSheet.equals("Runmanager")){
+			SheetName = firstSheet.toString();
+			if(Sheetname.equalsIgnoreCase("RunManager")){
 				System.out.println("--Inside Xl reader method --");
 				
 				
@@ -55,34 +58,42 @@ public class XlReader {
 			         String ArrayIndex = iterator.next();
 			         if(ArrayIndex.equals("Y")){
 			        	
-			        	 TestCaseName = iterator.next();
-			        	 
 			        	 BrowserToSelect = iterator.next();
-			        	
+			        	 System.out.println(BrowserToSelect);
+			        	 TestCaseName = iterator.next();
+			        	 System.out.println(TestCaseName);
+			        	 
+			        	 
 			         }
 			     }
-			}else{
-			getRowsData();
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
 
-	public List<String> getRowsData() throws Exception{
+	public static void runTC()throws Exception{
+		
+		
+		DriverClass.get().LaunchDriver(BrowserToSelect);
+		
+	}
+	
+	
+	public static List<String> getRowsData() throws Exception{
 
 		int Counter  = 0;
 		rowcount = firstSheet.getLastRowNum(); // index frm 0
 		rowcount++;
- 		System.out.println("Rows are"+rowcount);
+		//		System.out.println("Rows are"+rowcount);
 		 for(int i=0;i<rowcount;i++){  // num of rows needed		
 		 			colCount = firstSheet.getRow(i).getLastCellNum();
-		 			System.out.println("Cols are"+colCount);
+		 //			System.out.println("Cols are"+colCount);
 		 			Row row = firstSheet.getRow(i);
 		 			for(int j=0;j<colCount;j++){
 		 			String cell = row.getCell(j).toString().trim();
 		 			arr1.add(cell);
-		 			System.out.println(arr1.get(Counter));
+		// 			System.out.println(arr1.get(Counter));
 		 			Counter++;
 	
 		 			}	 			
